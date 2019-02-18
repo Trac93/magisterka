@@ -1,0 +1,11 @@
+D:\Magisterka\undersampling\undersampling\bin\Debug\undersampling.exe.config
+D:\Magisterka\undersampling\undersampling\bin\Debug\undersampling.exe
+D:\Magisterka\undersampling\undersampling\bin\Debug\undersampling.pdb
+D:\Magisterka\undersampling\undersampling\obj\Debug\undersampling.csprojAssemblyReference.cache
+D:\Magisterka\undersampling\undersampling\obj\Debug\undersampling.csproj.CoreCompileInputs.cache
+D:\Magisterka\undersampling\undersampling\obj\Debug\undersampling.exe
+D:\Magisterka\undersampling\undersampling\obj\Debug\undersampling.pdb
+D:\Magisterka\undersampling\undersampling\bin\Debug\Accord.dll.config
+D:\Magisterka\undersampling\undersampling\bin\Debug\Accord.dll
+D:\Magisterka\undersampling\undersampling\bin\Debug\Accord.xml
+D:\Magisterka\undersampling\undersampling\obj\Debug\undersampling.csproj.CopyComplete
