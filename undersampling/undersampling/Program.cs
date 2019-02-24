@@ -23,12 +23,11 @@ namespace undersampling
             int minorityPopulation = population[minorityLabel];
             double[][] majorityClass = GetWholeClass(majorityLabel, dataNumber, majorityPopulation);
             double[][] minorityClass = GetWholeClass(minorityLabel, dataNumber, minorityPopulation);
+            double[][] majorityWithoutLabels = GetSamplesWithoutLabels(majorityClass);
             KMeans kmeans = new KMeans(k: minorityPopulation);
-            var clusters = kmeans.Learn(majorityClass);
-            int[] labels = clusters.Decide(majorityClass);
-            int[] clustersPopulation = GetClustersPopulation(labels, minorityPopulation);
-            double[][] summed = GetSumOfClustersRecords(majorityClass, labels, minorityPopulation);
-            Console.ReadKey();
+            var clusters = kmeans.Learn(majorityWithoutLabels);
+            double[][] centroids = clusters.Centroids;
+            WriteToFile(centroids, minorityClass, majorityLabel);
         }
         
         static double [][] ConvertArray(string[][] data)
@@ -104,38 +103,48 @@ namespace undersampling
             return wholeClass;
         }
 
-    static int[] GetClustersPopulation(int[] labels, int minorityPopulation)
+    static double [][] GetSamplesWithoutLabels (double[][] majorityClass)
         {
-            int[] clustersPopulation = new int[minorityPopulation];
-            Array.Clear(clustersPopulation, 0, clustersPopulation.Length);
-            for (int i = 0; i < labels.Length; i++)
+            double[][] majorityWithoutLabels = new double[majorityClass.Length][];
+            double[] temp = new double[majorityClass[0].Length - 1];
+            for (int i = 0; i < majorityClass.Length; i++)
             {
-                clustersPopulation[labels[i]] += 1;
+                for (int j = 0; j < temp.Length; j++)
+                {
+                    temp[j] = majorityClass[i][j];
+                }
+                majorityWithoutLabels[i] = (double[])temp.Clone();
             }
-            return clustersPopulation;
+            return majorityWithoutLabels;
         }
 
-    static double[][] GetSumOfClustersRecords (double[][] majorityClass, int[] labels, int minorityPopulation)
+    static void WriteToFile (double[][] centroids, double[][] minorityClass, int majorityLabel)
         {
-            double [][] summed = new double[minorityPopulation][];
-            double[] temp = new double[majorityClass[0].Length]; 
-            for (int i = 0; i < temp.Length; i++)
+            using (var sw = new StreamWriter(@"D:\Repo\Magisterka\zbiory\new.dat"))
             {
-                temp[i] = 0.0;
-            }
-            for (int i = 0; i < summed.Length; i++)
-            {
-                summed[i] = (double[])temp.Clone();
-            }
-            for (int i = 0; i < labels.Length; i++)
-            {
-                for (int j = 0; j < majorityClass[i].Length; j++)
+                for (int i = 0; i < centroids.Length; i++)
                 {
-                    summed[labels[i]][j] += majorityClass[i][j];
+                    for (int j = 0; j < centroids[i].Length; j++)
+                    {
+                        sw.Write(centroids[i][j] + "; ");
+                    }
+                    sw.Write(majorityLabel);
+                    sw.WriteLine();
                 }
+                for (int i = 0; i < minorityClass.Length; i++)
+                {
+                    for (int j = 0; j < minorityClass[i].Length; j++)
+                    {
+                        sw.Write(minorityClass[i][j] + "; ");
+                    }
+                    if (i != minorityClass.Length - 1)
+                    {
+                        sw.WriteLine();
+                    }
+                }
+                sw.Flush();
+                sw.Close();
             }
-            return summed;
         }
-        
     }
 }
